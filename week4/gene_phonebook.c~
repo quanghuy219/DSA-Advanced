@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define INITIAL_SIZE 100
+#define INCREMENT_SIZE 10
+
+typedef struct {
+  void *key;
+  void *value;
+} Entry;
+
+typedef struct {
+  Entry *entries;
+  int size, total;
+  Entry (*makeNode)(void*, void*);
+  int (*compare)(void*,void*);
+} SymbolTable;
+
+Entry makeNode(void* name, void* number) {
+  Entry  newEntry;
+  newEntry.key = strdup((char*)name);
+  newEntry.value = malloc(sizeof(long));
+  //printf("%ld\n", *(long*)number);
+  memcpy(newEntry.value, number, sizeof(long));
+  return newEntry;
+}
+
+int compare(void* a, void* b) {
+  return strcmp( (char*)a, (char*)b );
+}
+
+SymbolTable createTable(Entry(*makeNode)(void*,void*), int (*compare)(void*,void*)) {
+  SymbolTable new;
+  new.makeNode = makeNode;
+  new.compare = compare;
+  return new;
+}
+
+void addEntry(void* key, void* value, SymbolTable *book) {
+  Entry new = makeNode(key,value);
+  
+  if(book->size == 0) {
+  book->entries = (Entry*)malloc(INCREMENT_SIZE);
+  }
+  else {
+    book->entries = realloc(book->entries, book->size + INCREMENT_SIZE);
+  }
+  book->entries[book->total] = new;
+  book->size += sizeof(new);
+  book->total += 1;
+}
+
+Entry* getEntry(void* key, SymbolTable book) {
+  for(int i = 0; i < book.total; i++) {
+    if ( book.compare( key, book.entries[i].key  ) == 0) {
+      return &book.entries[i];
+    }
+  }
+  return NULL;
+}
+
+void dropTable(SymbolTable *tab) {
+  for(int i = 0; i < tab->total; i++) {   
+    free(tab->entries[i].key);
+    free(tab->entries[i].value);
+  }
+  free(tab->entries);
+}
+
+void print(SymbolTable phoneBook){
+  for(int i = 0; i < phoneBook.total; i++) {
+    printf("%-20s%ld\n",(char*)phoneBook.entries[i].key, *(long*)phoneBook.entries[i].value);
+  }
+  printf("\n");
+}
+
+int main()
+{
+  SymbolTable phoneBook = createTable(makeNode, compare);
+  long number = 123123;
+  char name[] = "Ta Tuan Anh";
+  addEntry(name,&number,&phoneBook);
+  long x = 12313123;
+  char name2[] = "Pham Quang Huy";
+  addEntry(name2,&x, &phoneBook);
+  print(phoneBook);
+  printf("%d\n",phoneBook.total );
+  Entry *new = getEntry("Pham Quang Huy",phoneBook);;
+  //if (new != NULL) {
+  //printf("%-20s%ld\n",(char*)new->key, *(long*)new->value );
+  // }
+  
+  //dropTable(&phoneBook);
+  return 0;
+}
