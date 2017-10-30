@@ -119,7 +119,6 @@ int main()
   BTA *book = btopn("btphonebook.dat", 0, 0);
 
   int select = 1;
-  int count;
 
 
   while (select != 0) {
