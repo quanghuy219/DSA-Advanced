@@ -1,4 +1,4 @@
-#include "lib/jrb.h"
+#include "libfdr/jrb.h"
 
 typedef JRB Graph;
 

@@ -28,10 +28,11 @@ int main()
   }
   */
 
+  
   printf("\nBFS start from node 1 to 5: ");
   BFS(g,1,5,printVertex);
   printf("\nDFS start from node 1 to all: ");
-  DFS(g, 1,3, printVertex);
+  DFS(g, 1,-1, printVertex);
   printf("\n");
   return 0;
 }

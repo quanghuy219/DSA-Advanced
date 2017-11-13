@@ -66,7 +66,7 @@ void BFS(Graph graph, int start, int stop, void (*func)(int)) {
   //int totalAdjacentNode;
   
   while(!dll_empty(queue)) {
-    node_list = dll_last(queue);
+    node_list = dll_first(queue);
     int u = jval_i(dll_val(node_list));
     dll_delete_node(node_list);
     if(jrb_find_int(visited, u) == NULL) {
@@ -101,7 +101,7 @@ void DFS(Graph graph, int start, int stop, void (*func)(int)) {
   //int totalAdjacentNode;
   
   while(!dll_empty(queue)) {
-    node_list = dll_first(queue);
+    node_list = dll_last(queue);
     int u = jval_i(dll_val(node_list));
     dll_delete_node(node_list);
     if(jrb_find_int(visited, u) == NULL) {
